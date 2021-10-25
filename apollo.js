@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 
 export const isLoggedInVar = makeVar(false);		// 로그인 여부
 export const tokenVar = makeVar("");				// 로그인 토큰 값
@@ -55,10 +56,22 @@ const onErrorLink = onError(({ graphQLErros, networkError }) => {
 // 모든 http link를 합한 정보
 const httpsLink = authLink.concat(onErrorLink).concat(uploadHttpLink);
 
+// merge 처리한 캐시
+// cache persist 기능을 구현하기 위해 cache를 expot 처리 해주는 것도
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        seeCoffeeShops: offsetLimitPagination(),
+      },
+    },
+  },
+});
+
 // apollo client
 const client = new ApolloClient({
 	link : httpsLink,
-	cache : new InMemoryCache()
+	cache
 });
 
 export default client;

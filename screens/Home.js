@@ -1,26 +1,87 @@
-import React from "react";
-import {TouchableOpacity, View, Text} from "react-native";
+import React, {useState, useEffect} from "react";
+import { ActivityIndicator, FlatList, Text, View, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
+import {gql, useQuery} from "@apollo/client";
 import { logUserOut } from "../apollo";
+import {SHOP_FRAGMENT, USER_FRAGMENT, PHOTO_FRAGMENT, CATEGORY_FRAGMENT} from "../fragments";
+import ScreenLayout from "../components/ScreenLayout";
+import Shop from "../components/feed/Shop";
 
-// 기본 레이아웃
-const Container = styled.View`
-	flex : 1;
-	background-color : white;
-	align-items : center;
-	justify-content : center;
-	padding : 0px 20px;
-	padding-bottom : 100px;
+// 전체 커피숍 데이터
+const HOME_QUERY = gql`
+	query seeCoffeeShops($offset : Int!){
+		seeCoffeeShops(offset : $offset){
+			...ShopFragment
+			user{
+				...UserFragment				
+			}			
+			photos{
+				...PhotoFragment				
+			}
+			categories{
+				...CategoryFragment				
+			}
+		}		
+	}
+	${SHOP_FRAGMENT}
+	${USER_FRAGMENT}
+	${PHOTO_FRAGMENT}
+	${CATEGORY_FRAGMENT}
 `;
 
 export default function Home({navigation}){
+	// usequery
+	const {data, loading, refetch, fetchMore} = useQuery(HOME_QUERY, {
+		variables : {
+			offset : 0
+		}
+	})
+	
+	// flatlist renderitem
+	const renderShop = ({item : shop}) => {
+		return <Shop {...shop} />;
+	}
+	
+	// pull to refresh
+	const [refreshing, setRefreshing] = useState(false);
+	
+	// 새로고침
+	const refresh = async () => {
+		setRefreshing(true);
+		await refetch();
+		setRefreshing(false);
+	}
+	
+	useEffect(() => {
+		refresh();
+	}, []);
 	
 	return(
-		<Container>
-			<Text>Home</Text>
-			<TouchableOpacity onPress={logUserOut}>
-				<Text>로그아웃</Text>
-			</TouchableOpacity>
-		</Container>
+		<ScreenLayout loading={loading}>
+			<FlatList 
+				data = {data?.seeCoffeeShops}
+				keyExtractor = {(shop) => shop.id + ""}
+				renderItem={renderShop}
+				showVerticalScrollIndicator={false}
+				style = {{width : "100%"}}
+				refreshing={refreshing}
+				onRefresh={refresh}
+				onEndReachedThreshold={0.02}
+				onEndReached={() => fetchMore({
+					variables : {
+						offset : data?.seeCoffeeShops?.length
+					}
+				})}
+				ItemSeparatorComponent={() => (
+						<View
+							style= {{
+								width : "100%",
+								height : 1,
+								backgroundColor : "rgba(0, 0, 0, 0.2)",
+							}}>
+						</View>
+				)}		
+			/>
+		</ScreenLayout>		
 	);
 }

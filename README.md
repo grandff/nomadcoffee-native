@@ -22,7 +22,7 @@
 	- preloadAssets function을 통해 폰트, 이미지 등을 promise를 활용해서 로드
 	- assets을 포함한 추후 캐시 호출 등 전체 파일 로드를 위한 preload function 추가
 	
-## 11 Navigation
+## 13 Navigation
 ### tab navigation
 1) 기본 화면은 tab navigation으로 구성
 	- npm install @react-navigation/bottom-tabs
@@ -45,7 +45,7 @@
 	- 기본 헤더부분은 로고만  넣기
 	- 로그인이 안된 상태면 프로필을 갈때 로그인이 필요하다고 나옴
 	- main navs의 mode를 card로 설정했음
-### Login, Register
+### Login
 1) 로그인 화면 구성
 	- 로그인 화면은 기존 화면 그대로 구성하기
 	- 키보드 열릴때 화면 이동을 위한 dismisskeyboard 기능 추가
@@ -53,12 +53,30 @@
 2) apollo mutation 연결
 	- react hook form 설치(yarn add react-hook-form)
 	- 로그인 성공 시 profile 화면으로 이동
+
+## 14 Home Tab
+### Home Tab
+1) FlatList를 사용해서 Home 화면 구성
+	- 안의 컴포넌트는 별도 파일 생성
+	- apollo 연결
+	- data, keyextractor, renderitem 필수요소 다시 한번 기억하긔
+2) FlatList의 컴포넌트 구현
+	- 이름, 사진, 카테고리, 내용이 나오도록
+	- usewindowdimension을 통해 기기의 정확한 너비 값 가져와서 설정
+3) Loading 표시를 해주는 ScreenLayout component 생성
+4) Infinite scroll 구현
+	- flatlist의 onendreachedthreshold, onEndReached prop 사용
+	- onEndReachedThreshold는 적당히 길이 봐서 설정해주기
+5) pull to refresh 구현
+	- flatlist의 refreshing, onRefresh prop 사용
+	- setRefreshing useState 추가
+	- useQuery의 refetch를 불러오는 refresh 함수 추가
+6) 구분자 추가
+	- ItemSeparatorComponent prop에 view 추가
 	
-## 작업 일정 정리해보기
-1) 로그인 구현
-2) 회원가입 구현
-3) 메인화면 네비게이션 탭바 구현
-4) apollo 연결 --> 여기까지가 아마 챌린지 내용 (14번 Apollo Auth 까지임)
-5) 로고 만들기
-6) favicon 만들기
-7) front 작업 마무리
+	
+## 추가 기능 구현 목록
+### 사진 업로드
+### 실시간 대화
+### 팔로우, 언팔로우 기능
+### 상대방 프로필 조회
