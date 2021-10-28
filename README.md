@@ -1,4 +1,5 @@
 # Instaclone Challenge - Nomad Coffee Native
+<<<<<<< HEAD
 
 ## 11 Setup
 ### react-natvie
@@ -93,3 +94,5 @@
 ### 실시간 대화
 ### 팔로우, 언팔로우 기능
 ### 상대방 프로필 조회
+=======
+>>>>>>> 52bc164d0366f205d02e35fcfce2696ed49f08e3
