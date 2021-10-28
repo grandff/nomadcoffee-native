@@ -74,6 +74,19 @@
 6) 구분자 추가
 	- ItemSeparatorComponent prop에 view 추가
 	
+## 15 Search Tab
+### search query
+1) coffee shop을 검색하도록 search query 추가 (backend)
+### DismissKeyboard
+1) 빈화면을 누르면 키보드가 사라지도록 레이아웃 추가
+	- TouchableWithoutFeedback을 사용해서 터치 이벤트 추가
+	- keyboard.dismiss를 통해 키보드 사라짐 효과 추가
+	- Platform 변수를 통해 web에선 동작 안하도록 설정
+2) Search Tab을 DismissKeyboard로 감싸기
+### Search Tab
+1) 검색하는 순간 쿼리 실행을 위해 lazy query 사용
+
+	
 	
 ## 추가 기능 구현 목록
 ### 사진 업로드
