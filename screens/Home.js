@@ -6,6 +6,7 @@ import { logUserOut } from "../apollo";
 import {SHOP_FRAGMENT, USER_FRAGMENT, PHOTO_FRAGMENT, CATEGORY_FRAGMENT} from "../fragments";
 import ScreenLayout from "../components/ScreenLayout";
 import Shop from "../components/feed/Shop";
+import {Ionicons} from "@expo/vector-icons";
 
 // 전체 커피숍 데이터
 const HOME_QUERY = gql`
@@ -52,7 +53,18 @@ export default function Home({navigation}){
 		setRefreshing(false);
 	}
 	
+	// go to photo 
+	const PhotoButton = () => (
+		<TouchableOpacity style={{marginRight : 25}} onPress={() => navigation.navigate("Upload")}>
+			<Ionicons name="camera" color="black" size={20} />
+		</TouchableOpacity>
+	)
+	
 	useEffect(() => {
+		navigation.setOptions({
+			headerRight : PhotoButton
+		});
+				
 		refresh();
 	}, []);
 	
